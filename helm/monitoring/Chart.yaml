@@ -1,0 +1,24 @@
+---
+apiVersion: v2
+type: application
+name: monitoring
+description: Momo Store monitoring Helm Chart
+
+version: 0.1.0
+appVersion: "latest"
+
+dependencies:
+  - name: grafana
+    version: 0.17.0
+  - name: prometheus
+    version: ~21.0.0
+    repository: "https://prometheus-community.github.io/helm-charts"
+  - name: trickster
+    version: ~1.5.4
+    repository: "https://helm.tricksterproxy.io"
+  - name: loki
+    version: ~2.8.0
+    repository: "https://grafana.github.io/helm-charts"
+  - name: promtail
+    version: ~2.0.0
+    repository: "https://grafana.github.io/helm-charts"

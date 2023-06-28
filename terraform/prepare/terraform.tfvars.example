@@ -1,0 +1,6 @@
+token = ""
+key_file = ""
+cloud_id = ""
+folder_id = ""
+zone = "ru-central1-a"
+bucket_name = "terraform-shubin-momo-bucket"

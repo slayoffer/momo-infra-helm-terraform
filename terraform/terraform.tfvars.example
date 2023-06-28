@@ -1,0 +1,5 @@
+key_file = "/root/authorized_key.json"
+cloud_id = ""
+folder_id = ""
+zone = "ru-central1-a"
+whitelist = ["178.41.11.41/32"]

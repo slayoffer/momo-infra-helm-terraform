@@ -1,0 +1,48 @@
+backend:
+  image: gitlab.praktikum-services.ru:5050/std-012-042/momo-store/momo-backend
+  tag: "latest"
+  imagePullPolicy: Always
+  replicas: 3
+  rollingUpdate:
+    maxUnavailable: 2
+    maxSurge: 20% 
+  containerPort: 8081
+  nodePort: 30092
+  environment: production
+  resources:
+    requests:
+      memory: "100Mi"
+      cpu: "100m"
+    limits:
+      memory: "200Mi"
+      cpu: "200m"
+  annotations:
+    prometheusPath: /metrics
+    prometheusPort: "8081"
+    prometheusScrape: "true" 
+
+frontend:
+  image: gitlab.praktikum-services.ru:5050/std-012-042/momo-store/momo-frontend
+  tag: "latest"
+  imagePullPolicy: Always
+  # domain name for ingress frontend
+  fqdn: sausage-store.ru
+  replicas: 2
+  environment: production
+  containerPort: 80
+  nodePort: 30091
+  # out port for ingress frontend
+  ingressPort: 80
+  resources:
+    requests:
+      memory: "64Mi"
+      cpu: "100m"
+    limits:
+      memory: "128Mi"
+      cpu: "200m"
+
+global:
+  backServiceName: backend-service
+  backServicePort: 8080
+  # Токен для подключения к репозиторию с образами Необходимо передать
+  dockerconfigjson: 

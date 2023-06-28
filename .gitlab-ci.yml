@@ -1,0 +1,35 @@
+stages:
+  - upload
+
+upload-momo-helm:
+  stage: upload
+  image:
+    name: alpine/helm:latest
+    entrypoint: ['']
+  script:
+    - cd helm
+    - helm package momo-chart
+    - curl -u ${NEXUS_USER}:${NEXUS_PASS} ${NEXUS_REPO} --upload-file momo-*.tgz
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "pipeline"
+      when: never
+    - changes:
+      - helm/momo-chart/**/*
+
+upload-monitoring-helm:
+  stage: upload
+  image:
+    name: alpine/helm:latest
+    entrypoint: ['']
+  script:
+    - cd helm
+    - helm dependency build monitoring
+    - helm package monitoring
+    - curl -u ${NEXUS_USER}:${NEXUS_PASS} ${NEXUS_REPO} --upload-file monitoring-*.tgz
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "pipeline"
+      when: never
+    - changes:
+      - helm/monitoring/**/*
+
+

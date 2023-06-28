@@ -1,0 +1,58 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: "{{ .Chart.Name }}-ingress"
+  annotations:
+    ingress.alb.yc.io/subnets: {{ .Values.subnetId }}
+    ingress.alb.yc.io/external-ipv4-address: {{ or .Values.externalAddr "auto" }}
+    ingress.alb.yc.io/group-name: momo-alb-nginx
+spec:
+  tls:
+  - hosts:
+    - {{ .Values.fqdn }}
+    - "*.{{ .Values.fqdn }}"
+    # - alertmanager.sausage-store.ru
+    # - grafana.sausage-store.ru
+    # - prometheus.sausage-store.ru
+    secretName: yc-certmgr-cert-id-{{ .Values.certId }}
+  rules:
+  - host: {{ .Values.fqdn }}
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: {{ .Chart.Name }}
+            port:
+              number: {{ .Values.ingressPort }}
+  # - host: "prometheus.sausage-store.ru"
+  #   http:
+  #     paths:
+  #     - path: /
+  #       pathType: Prefix
+  #       backend:
+  #         service:
+  #           name: prometheus
+  #           port:
+  #             number: 9090
+  # - host: "grafana.sausage-store.ru"
+  #   http:
+  #     paths:
+  #     - path: /
+  #       pathType: Prefix
+  #       backend:
+  #         service:
+  #           name: grafana
+  #           port:
+  #             number: 3000
+  # - host: "alertmanager.sausage-store.ru"
+  #   http:
+  #     paths:
+  #     - path: /
+  #       pathType: Prefix
+  #       backend:
+  #         service:
+  #           name: alertmanager
+  #           port:
+  #             number: 9093
